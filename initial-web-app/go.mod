@@ -1,5 +1,5 @@
-module initial-web-app
+module go-breeders
 
-go 1.23
+go 1.20
 
-require github.com/go-chi/chi/v5 v5.2.0 // indirect
+require github.com/go-chi/chi/v5 v5.0.8 // indirect
