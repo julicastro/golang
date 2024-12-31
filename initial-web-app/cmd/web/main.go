@@ -4,26 +4,30 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"time"
 )
 
-// servidor web q escucha peticion
 const port = ":4000"
 
 type application struct{}
 
 func main() {
-	// app := application{}
+	app := application{}
 
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, "Hello World")
-	})
-
-	fmt.Println("Listening on ", port)
-
-	err := http.ListenAndServe(port, nil)
-	if err != nil {
-		log.Panicln(err)
+	srv := &http.Server{
+		Addr:              port,
+		Handler:           app.routes(),
+		IdleTimeout:       30 * time.Second,
+		ReadTimeout:       30 * time.Second,
+		ReadHeaderTimeout: 30 * time.Second,
+		WriteTimeout:      30 * time.Second,
 	}
-}
 
-// router dependency: go get -u github.com/go-chi/chi/v5
+	fmt.Println("Starting web application on port", port)
+
+	err := srv.ListenAndServe()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+}
